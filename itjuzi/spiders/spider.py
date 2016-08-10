@@ -22,7 +22,7 @@ class spider(Spider):
         if response.status == 200:
             for sel in response.xpath('//p[@class="title"]/a'):
                 company_url = sel.xpath('@href').extract()[0]
-                yield scrapy.Request(company_url, callback=self.parse_content)
+                yield scrapy.Request(company_url, callback=self.parse_content, dont_filter=True)
 
             next_page_xpath = response.xpath('//div[contains(@class, "ui-pagechange")]/a')
             for i in next_page_xpath:
@@ -30,7 +30,7 @@ class spider(Spider):
                     next_page = i.xpath('@href').extract()[0]
             if next_page:
                 print "next_page: %s" % next_page
-                yield scrapy.Request(next_page, callback=self.parse)
+                yield scrapy.Request(next_page, callback=self.parse, dont_filter=True) #dont_filter 防止'Filtered duplicate request'错误
 
     def parse_content(self, response):
         if response.status == 200:
