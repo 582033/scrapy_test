@@ -21,9 +21,9 @@ class ItjuziPipeline(object):
         cursor = conn.cursor()
 
         itjuzi_id = item['itjuzi_id']
-        company_name = item['company_name'] or 'null'
-        company_sec_name = item['company_sec_name'] or 'null'
-        company_slogan = item['company_slogan'] or 'null'
+        company_name = item['company_name'] or ""
+        company_sec_name = item['company_sec_name'] or ""
+        company_slogan = item['company_slogan'] or ""
         if self.check_juzi_id(itjuzi_id) > 0:
             #如果id已存在则更新
             sql = "update company set company_name='%s', company_sec_name='%s', company_slogan='%s' where juzi_id=%s"
