@@ -21,18 +21,17 @@ class ItjuziPipeline(object):
         cursor = conn.cursor()
 
         itjuzi_id = item['itjuzi_id']
+        company_name = item['company_name'] or 'null'
+        company_sec_name = item['company_sec_name'] or 'null'
+        company_slogan = item['company_slogan'] or 'null'
         if self.check_juzi_id(itjuzi_id) > 0:
             #如果id已存在则更新
             sql = "update company set company_name='%s', company_sec_name='%s', company_slogan='%s' where juzi_id=%s"
-            cursor.execute(sql % [ item['company_name'], item['company_sec_name'], item['company_slogan'], item['itjuzi_id'] ])
+            cursor.execute(sql % (company_name, company_sec_name, company_slogan, itjuzi_id))
         else:
             sql = "insert into company (juzi_id, company_name, company_sec_name, company_slogan)values(%s, %s, %s, %s)"
-            print "---------------------"
-            pprint(item)
-            pprint(type(item['company_name']))
-            pprint(item['company_name'])
-            print "---------------------"
-            cursor.execute(sql % ( item['itjuzi_id'], item['company_name'], item['company_sec_name'] or 'null', item['company_slogan'] or 'null' ))
+            #不要使用%拼接字符串,会导致sql注入及因为编码问题插入失败
+            cursor.execute(sql, (itjuzi_id, company_name, company_sec_name, company_slogan))
         conn.commit()
         conn.close()
 
